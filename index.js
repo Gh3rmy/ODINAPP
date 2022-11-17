@@ -139,7 +139,7 @@ app.post("/sisa-matricula", (req, res) => {
       await page.click(".util_org_padre100alto"); 
       await page.click("#gwt-uid-233"); 
       await page.type(".gwt-TextBox",body_filtros.sisa);
-      await page.click('div:nth-child(2) > .GGGX03MKU > .util_rec_alcent > .gwt-Anchor > .boton')
+      await page.click('div:nth-child(2) > .GGGX03MKU > .util_rec_alcent > .gwt-Anchor > .boton');
       await page.waitForTimeout(3000);
       let salida = await page.$eval('.pagePanel', el => el.innerText);
       res.send(salida);
@@ -166,7 +166,7 @@ app.post("/sisa-dni", (req, res) => {
       await page.click(".util_org_padre100alto"); 
       await page.click("#gwt-uid-232"); 
       await page.type(".gwt-TextBox",body_filtros.documento);
-      await page.click('div:nth-child(2) > .GGGX03MKU > .util_rec_alcent > .gwt-Anchor > .boton')
+      await page.click('div:nth-child(2) > .GGGX03MKU > .util_rec_alcent > .gwt-Anchor > .boton');
       await page.waitForTimeout(3000);
       let salida = await page.$eval('.pagePanel', el => el.innerText);
       res.send(salida);
@@ -195,7 +195,7 @@ app.post("/sisa-nombre", (req, res) => {
       await page.click("#gwt-uid-234"); 
       await page.type(".GGGX03MLU",body_filtros.apellido);
       await page.type("div > .GGGX03MKU > .util_rec_alcent > div > .gwt-TextBox:nth-child(3)",body_filtros.nombre);
-      await page.click('div:nth-child(2) > .GGGX03MKU > .util_rec_alcent > .gwt-Anchor > .boton')
+      await page.click('div:nth-child(2) > .GGGX03MKU > .util_rec_alcent > .gwt-Anchor > .boton');
       await page.waitForTimeout(3000);
       let salida = await page.$eval('.pagePanel', el => el.innerText);
       res.send(salida);
@@ -205,6 +205,55 @@ app.post("/sisa-nombre", (req, res) => {
         .finally(async () => await page.close())
       ;
 });
+
+
+app.post("/twitter", (req, res) => {
+  let page;
+  let body_filtros = req.body;
+  console.log(body_filtros);
+  (async () => {
+    page = await (await browserP).newPage({headless: true});
+    await page.setUserAgent('5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36');
+      await page.goto('http://socialbearing.com/');
+      
+      await page.waitForSelector("#search");
+      await page.click('#soption1'); 
+      await page.waitForTimeout(3000);
+      await page.type("#search",body_filtros.usuario);
+      await page.click('.bsubmit');
+      await page.waitForTimeout(5000);
+      await page.screenshot({path: 'buddy-screenshot.png'});
+      let salida = await page.$eval('#main-content', el => el.innerHTML);
+      res.send(salida);
+    
+        })()
+        .catch(err => res.sendStatus(500))
+        .finally(async () => await page.close())
+      ;
+});
+
+app.post("/obra-social", (req, res) => {
+  let page;
+  let body_filtros = req.body;
+  console.log(body_filtros);
+  (async () => {
+    page = await (await browserP).newPage({headless: true});
+    await page.setUserAgent('5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36');
+      await page.goto('http://www.saludnqn.gob.ar/PadroncONSULTASWeb/'); 
+      await page.waitForSelector("#ContentPlaceHolder1_txtNumero"); 
+      await page.waitForTimeout(2000);
+      await page.type("#ContentPlaceHolder1_txtNumero",body_filtros.dni);
+      await page.click("#ContentPlaceHolder1_btnBuscar");
+      await page.waitForTimeout(2000);
+      let salida = await page.$eval('#ContentPlaceHolder1_gvPersonas', el => el.innerText);
+      res.send(salida);
+    
+        })()
+        .catch(err => res.sendStatus(500))
+        .finally(async () => await page.close())
+      ;
+});
+
 
 
 
