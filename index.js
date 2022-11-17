@@ -123,7 +123,7 @@ app.post("/id-twitter", (req, res) => {
 });
 
 
-app.post("/sisa", (req, res) => {
+app.post("/sisa-matricula", (req, res) => {
   let page;
   let body_filtros = req.body;
   console.log(body_filtros);
@@ -139,9 +139,9 @@ app.post("/sisa", (req, res) => {
       await page.click(".util_org_padre100alto"); 
       await page.click("#gwt-uid-233"); 
       await page.type(".gwt-TextBox",body_filtros.sisa);
-      await page.screenshot({ path: `probando.jpeg` });
-      await page.waitForTimeout(5000);
-      let salida = await page.$eval('#output', el => el.innerText);
+      await page.click('div:nth-child(2) > .GGGX03MKU > .util_rec_alcent > .gwt-Anchor > .boton')
+      await page.waitForTimeout(3000);
+      let salida = await page.$eval('.pagePanel', el => el.innerText);
       res.send(salida);
     
         })()
@@ -150,6 +150,61 @@ app.post("/sisa", (req, res) => {
       ;
 });
 
+app.post("/sisa-dni", (req, res) => {
+  let page;
+  let body_filtros = req.body;
+  console.log(body_filtros);
+  (async () => {
+    page = await (await browserP).newPage({headless: true});
+    await page.setUserAgent('5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36');
+      await page.goto('https://sisa.msal.gov.ar/sisa/'); 
+      await page.waitForSelector("#homelogoff_serv_agenda"); 
+      await page.waitForTimeout(3000);
+      await page.click("#homelogoff_serv_agenda");
+      await page.waitForSelector(".util_org_hijo");
+      await page.waitForTimeout(3000);
+      await page.click(".util_org_padre100alto"); 
+      await page.click("#gwt-uid-232"); 
+      await page.type(".gwt-TextBox",body_filtros.documento);
+      await page.click('div:nth-child(2) > .GGGX03MKU > .util_rec_alcent > .gwt-Anchor > .boton')
+      await page.waitForTimeout(3000);
+      let salida = await page.$eval('.pagePanel', el => el.innerText);
+      res.send(salida);
+    
+        })()
+        .catch(err => res.sendStatus(500))
+        .finally(async () => await page.close())
+      ;
+});
+
+
+app.post("/sisa-nombre", (req, res) => {
+  let page;
+  let body_filtros = req.body;
+  console.log(body_filtros);
+  (async () => {
+    page = await (await browserP).newPage({headless: true});
+    await page.setUserAgent('5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36');
+      await page.goto('https://sisa.msal.gov.ar/sisa/'); 
+      await page.waitForSelector("#homelogoff_serv_agenda"); 
+      await page.waitForTimeout(3000);
+      await page.click("#homelogoff_serv_agenda");
+      await page.waitForSelector(".util_org_hijo");
+      await page.waitForTimeout(3000);
+      await page.click(".util_org_padre100alto"); 
+      await page.click("#gwt-uid-234"); 
+      await page.type(".GGGX03MLU",body_filtros.apellido);
+      await page.type("div > .GGGX03MKU > .util_rec_alcent > div > .gwt-TextBox:nth-child(3)",body_filtros.nombre);
+      await page.click('div:nth-child(2) > .GGGX03MKU > .util_rec_alcent > .gwt-Anchor > .boton')
+      await page.waitForTimeout(3000);
+      let salida = await page.$eval('.pagePanel', el => el.innerText);
+      res.send(salida);
+    
+        })()
+        .catch(err => res.sendStatus(500))
+        .finally(async () => await page.close())
+      ;
+});
 
 
 
